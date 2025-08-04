@@ -67,7 +67,7 @@
   users.users.jupi = {
     isNormalUser = true;
     description = "jupi";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "git" ];
     packages = with pkgs; [];
   };
 
@@ -83,7 +83,6 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-    neovim
     wget
     vim
     libnotify
@@ -97,8 +96,12 @@
     ncdu
     killall
     power-profiles-daemon
-    jq # Added for Ironbar workspace scripts
+    polkit_gnome
+    gnome-themes-extra
+    papirus-icon-theme
   ];
+
+  virtualisation.docker.enable = true;
 
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
@@ -116,11 +119,14 @@
     jack.enable = true;
   };
 
+
   services.avahi = {
     enable = true;
     nssmdns4 = true;
     openFirewall = true;
   };
+
+  security.polkit.enable = true;
 
   programs = {
     zsh.enable = true;

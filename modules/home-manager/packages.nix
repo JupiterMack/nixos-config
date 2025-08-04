@@ -16,6 +16,6 @@
     bibata-cursors
     inputs.zen-browser.packages."${pkgs.system}".twilight
     wayland
-
+    compose2nix
   ];
 }

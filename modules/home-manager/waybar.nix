@@ -29,7 +29,7 @@
           on-click = "activate";  /* Switch on click */
         };
         battery = {
-          format = "{capacity}%";  /* Simple percentage */
+          format = "{capacity}";  /* Simple percentage */
           tooltip = false;
         };
       };
@@ -69,6 +69,7 @@
       }
       #battery {
         padding: 0 10px;
+        opacity: 0.3;
         color: white;
       }
     '';

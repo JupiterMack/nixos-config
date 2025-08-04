@@ -18,9 +18,13 @@
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nvf = {
+      url = "github:notashelf/nvf";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
    };
 
-  outputs = { self, nixpkgs, home-manager, zen-browser, ... }@inputs: {
+  outputs = { self, nixpkgs, home-manager, zen-browser, nvf, ... }@inputs: {
     # use "nixos", or your hostname as the name of the configuration
     # it's a better practice than "default" shown in the video
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
