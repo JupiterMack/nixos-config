@@ -126,6 +126,7 @@
     openFirewall = true;
   };
 
+
   security.polkit.enable = true;
 
   programs = {

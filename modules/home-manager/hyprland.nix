@@ -14,7 +14,6 @@
       exec-once = [
         "swww-daemon"
 	"bash ~/.config/hypr/scripts/theme-switch.sh"
-	"waybar &"
 	"mako"
       ];
 

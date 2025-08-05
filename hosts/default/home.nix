@@ -13,6 +13,7 @@
     ../../modules/home-manager/waybar.nix
     ../../modules/home-manager/starship/starship.nix
     ../../modules/home-manager/nvf-custom.nix
+    ../../modules/home-manager/zed.nix
     inputs.zen-browser.homeModules.twilight
     inputs.nvf.homeManagerModules.default
   ];

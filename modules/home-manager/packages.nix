@@ -17,5 +17,6 @@
     inputs.zen-browser.packages."${pkgs.system}".twilight
     wayland
     compose2nix
+    zed-editor
   ];
 }
