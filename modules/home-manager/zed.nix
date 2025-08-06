@@ -1,56 +1,138 @@
-{ pkgs, ... }:
+{pkgs, lib, ... }:
 
 {
-  programs.zed-editor = {
-    enable = true;
+    programs.zed-editor = {
+        enable = true;
 
-    # Basic user settings (written to ~/.config/zed/settings.json)
-    # Customize as needed; this is a starting point to disable telemetry, set font sizes, and use system theme mode.
-    userSettings = {
-      telemetry = {
-        diagnostics = false;
-        metrics = false;
-      };
-      ui_font_size = 16;
-      buffer_font_size = 15;
-      theme = {
-        mode = "system";  # Follows your system light/dark mode (useful with Hyprland)
-        light = "One Light";
-        dark = "One Dark";
-      };
-      # Add more settings here, e.g.:
-      # autosave = "on_focus_change";
-      # tab_size = 4;
-      # vim_mode = true;  # If you want Vim keybindings
-    };
+        ## This populates the userSettings "auto_install_extensions"
+        extensions = ["nix" "toml" "elixir" "make"];
 
-    # Optional: Custom keymap (written to ~/.config/zed/keymap.json)
-    # Example: Add or override bindings
-    keymap = [
-      {
-        context = "Editor";
-        bindings = {
-          "ctrl-shift-l" = "editor::Format";
+        ## everything inside of these brackets are Zed options.
+        userSettings = {
+
+            assistant = {
+                enabled = true;
+                version = "2";
+                default_open_ai_model = null;
+                ### PROVIDER OPTIONS
+                ### zed.dev models { claude-3-5-sonnet-latest } requires github connected
+                ### anthropic models { claude-3-5-sonnet-latest claude-3-haiku-latest claude-3-opus-latest  } requires API_KEY
+                ### copilot_chat models { gpt-4o gpt-4 gpt-3.5-turbo o1-preview } requires github connected
+                default_model = { 
+                    provider = "zed.dev";
+                    model = "claude-3-5-sonnet-latest";
+                };
+
+                #                inline_alternatives = [
+                #                    {
+                #                        provider = "copilot_chat";
+                #                        model = "gpt-3.5-turbo";
+                #                    }
+                #                ];
+            };
+
+            node = {
+                path = lib.getExe pkgs.nodejs;
+                npm_path = lib.getExe' pkgs.nodejs "npm";
+            };
+
+            hour_format = "hour24";
+            auto_update = false;
+            terminal = {
+                alternate_scroll = "off";
+                blinking = "off";
+                copy_on_select = false;
+                dock = "bottom";
+                detect_venv = {
+                    on = {
+                        directories = [".env" "env" ".venv" "venv"];
+                        activate_script = "default";
+                    };
+                };
+                env = {
+                    TERM = "kitty";
+                };
+                font_family = "FiraCode Nerd Font";
+                font_features = null;
+                font_size = null;
+                line_height = "comfortable";
+                option_as_meta = false;
+                button = false;
+                shell = "system"; 
+                #{
+                #                    program = "zsh";
+                #};
+                toolbar = {
+                    title = true;
+                };
+                working_directory = "current_project_directory";
+            };
+
+
+
+            lsp = {
+                rust-analyzer = {
+
+                    binary = {
+                        #                        path = lib.getExe pkgs.rust-analyzer;
+                        path_lookup = true;
+                    };
+                };
+                nix = { 
+                    binary = { 
+                        path_lookup = true; 
+                    }; 
+                };
+
+                elixir-ls = {
+                    binary = {
+                        path_lookup = true; 
+                    };
+                    settings = {
+                        dialyzerEnabled = true;
+                    };
+                };
+            };
+
+
+            languages = {
+                "Elixir" = {
+                    language_servers = ["!lexical" "elixir-ls" "!next-ls"];
+                    format_on_save = {
+                        external = {
+                            command = "mix";
+                            arguments = ["format" "--stdin-filename" "{buffer_path}" "-"];
+                        };
+                    };
+                };
+                "HEEX" = {
+                    language_servers = ["!lexical" "elixir-ls" "!next-ls"];
+                    format_on_save = {
+                        external = {
+                            command = "mix";
+                            arguments = ["format" "--stdin-filename" "{buffer_path}" "-"];
+                        };
+                    };
+                };
+            };
+
+            vim_mode = true;
+            ## tell zed to use direnv and direnv can use a flake.nix enviroment.
+            load_direnv = "shell_hook";
+            base_keymap = "VSCode";
+            theme = {
+                mode = "system";
+                light = "Carbonfox -blurred";
+                dark = "Carbonfox -blurred";
+            };
+            show_whitespaces = "all" ;
+            ui_font_size = 16;
+            buffer_font_size = 16;
+
         };
-      }
-    ];
 
-    # Optional: Install extensions on startup (from Zed's extension marketplace)
-    # Example: Add language support or tools
-    extensions = [
-      "nix"  # For Nix language support
-      "rust" # If you code in Rust
-      "git"  # Enhanced Git integration
-    ];
-
-    # Optional: Extra packages made available to Zed (e.g., for language servers or tools)
-    extraPackages = with pkgs; [
-      nil  # Nix language server
-      rust-analyzer  # For Rust
-    ];
-  };
-
-  # Optional: Set Zed as your default editor (e.g., for git commit or terminal editing)
-  # If you don't want this, comment it out.
-  home.sessionVariables.EDITOR = "zed";
+    };
 }
+
+
+
